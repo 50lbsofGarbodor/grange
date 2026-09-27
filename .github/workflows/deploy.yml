@@ -56,9 +56,8 @@ jobs:
             "set -euo pipefail && \
              cd $DEPLOY_PATH && \
              export PATH=\$HOME/.local/share/mise/shims:\$PATH && \
-             export CI=true && \
+             export CI=false && \
              pnpm install --frozen-lockfile --prod && \
              export XDG_RUNTIME_DIR=/run/user/\$(id -u) && \
              systemctl --user restart grange && \
-             sleep 2 && \
-             curl -fsS http://localhost:$APP_PORT/api/state"
+             curl --retry 15 --retry-delay 2 --retry-connrefused -fsS http://127.0.0.1:$APP_PORT/api/state"
